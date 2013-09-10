@@ -1,0 +1,1 @@
+GLKViewのsnapshot検証用サンプル
