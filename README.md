@@ -1,1 +1,3 @@
 GLKViewのsnapshot検証用サンプル
+
+snapshot時にアルファ値を削除するようにした

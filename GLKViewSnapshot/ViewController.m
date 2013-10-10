@@ -397,8 +397,26 @@ GLfloat gCubeVertexData[216] =
 
 - (void)doSnapshot
 {
-  GLKView* view = (GLKView*)self.view;
-  _image_view.image = [view snapshot];
+  // 画面のスナップショット
+  UIImage* image = [(GLKView*)self.view snapshot];
+
+  // スナップショットのアルファ値を捨てるため、UIImageを再構築してから使う
+  UIGraphicsBeginImageContextWithOptions(image.size, YES, 0.0f);
+
+  // オフスクリーンレンダリング
+  CGContextRef ctx = UIGraphicsGetCurrentContext();
+  CGRect area = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
+
+  // 上下をひっくり返す
+  CGContextScaleCTM(ctx, 1.0f, -1.0f);
+  CGContextTranslateCTM(ctx, 0.0f, -area.size.height);
+  
+  CGContextDrawImage(ctx, area, image.CGImage);
+
+  // UIImageを取得
+  _image_view.image = UIGraphicsGetImageFromCurrentImageContext();
+
+  UIGraphicsEndImageContext();
 }
 
 
